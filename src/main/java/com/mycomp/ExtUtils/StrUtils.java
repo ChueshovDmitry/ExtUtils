@@ -102,6 +102,11 @@ public class StrUtils {
         return dateTime;
     }
 
+    public static String currentDate()
+    {
+        return currentDate("dd.MM.yyyy HH:mm:ss");
+    }
+
     /**
      * Метод генерит Гуид
      * @return строка гуида

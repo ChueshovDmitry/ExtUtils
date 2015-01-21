@@ -121,4 +121,49 @@ public class FileUtils {
             dir.delete();
         } else dir.delete();
     }
+    public static void printLog(String message){
+        printLog(message, "./");
+    }
+    public static void printLog(String message, String pathLogs){
+        message = "["+StrUtils.currentDate()+"]"+message+ "\n";
+        try{
+//            String pathLogs = "/tmp/logsServices/AdjustTimeService/";
+            File dir = new File(pathLogs);
+            if(!dir.exists())
+                dir.mkdirs();
+            String logFileName = pathLogs+"log.out";
+            File logFile = new File(logFileName);
+            if(dir.exists()){
+                if(!logFile.exists()) {
+                    try{
+                        logFile.createNewFile();
+                    }catch (Exception e) {
+                        System.out.println("Невозможно создать запись в лог сервиса!\n"+StrUtils.getCustomStackTrace(e));
+                    }
+                }else{
+                    if (logFile.length()>1024*1024*10){
+                        String newFname = pathLogs+"log_"+StrUtils.currentDate()+".out";
+                        logFile.renameTo(new File(newFname));
+                        logFile = new File(logFileName);
+                        if(!logFile.exists()) {
+                            try{
+                                logFile.createNewFile();
+                            }catch (Exception e) {
+                                System.out.println("Невозможно создать запись в лог сервиса!\n"+StrUtils.getCustomStackTrace(e));
+                            }
+                        }
+                    }
+                }
+                if(logFile.canWrite()){
+                    writeFile(logFileName, message, true);
+                }else{
+                    System.out.println("Невозможно создать запись в лог системы автоматической рассылки репликаций(файл лога заблокирован)!");
+                }
+            }else{
+                System.out.println("Невозможно создать директорию для логов!");
+            }
+        }catch (Exception e) {
+            System.out.println("Невозможно создать запись в лог сервиса!\n"+StrUtils.getCustomStackTrace(e));
+        }
+    }
 }

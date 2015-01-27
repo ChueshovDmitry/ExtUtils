@@ -2,6 +2,7 @@ package com.mycomp.ExtUtils;
 
 import java.io.File;
 import java.io.StringReader;
+import java.net.URL;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -58,6 +59,18 @@ private static String errorTrace;
 			doc = xmldoc.parse(fileXml);
 			rootel = doc.getDocumentElement(); // корневой элемент документа//
 		}
+	}
+
+	public UParser(URL url) throws Exception {
+		super();
+		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+		factory.setIgnoringComments(true);
+		factory.setCoalescing(true); // Convert CDATA to Text nodes
+		factory.setNamespaceAware(false); // No namespaces: this is default
+		factory.setValidating(false);
+		DocumentBuilder parser = factory.newDocumentBuilder();
+		Document doc = parser.parse(url.openStream());
+		rootel = doc.getDocumentElement(); // корневой элемент документа//
 	}
 	
 	/**

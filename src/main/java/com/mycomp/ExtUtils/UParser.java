@@ -68,6 +68,8 @@ private static String errorTrace;
 		factory.setCoalescing(true); // Convert CDATA to Text nodes
 		factory.setNamespaceAware(false); // No namespaces: this is default
 		factory.setValidating(false);
+		factory.setFeature("http://apache.org/xml/features/nonvalidating/load-external-dtd",false);
+
 		DocumentBuilder parser = factory.newDocumentBuilder();
 		Document doc = parser.parse(url.openStream());
 		rootel = doc.getDocumentElement(); // корневой элемент документа//
@@ -128,14 +130,19 @@ private static String errorTrace;
 	 */
 	public static String paramValue(Node node, String paramName) 
 	{
-		String result = "";
-		if (node != null) {
-			NamedNodeMap n = node.getAttributes();
-			if (n.getLength() > 0)
-				result = n.getNamedItem(paramName).getNodeValue();
-			else
-				result = "";
+		String result = null;
+		try{
+			if (node != null) {
+				NamedNodeMap n = node.getAttributes();
+				if (n.getLength() > 0)
+					result = n.getNamedItem(paramName).getNodeValue();
+				else
+					result = "";
+			}
+		}catch (Exception e){
+			System.out.println("Param not found");
 		}
+
 		return result;
 	}
 	

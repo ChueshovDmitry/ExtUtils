@@ -157,7 +157,7 @@ public class FileUtils {
                 if(logFile.canWrite()){
                     writeFile(logFileName, message, true);
                 }else{
-                    System.out.println("Невозможно создать запись в лог системы автоматической рассылки репликаций(файл лога заблокирован)!");
+                    System.out.println("Невозможно создать запись в лог (файл лога заблокирован)!");
                 }
             }else{
                 System.out.println("Невозможно создать директорию для логов!");

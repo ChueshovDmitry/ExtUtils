@@ -166,4 +166,20 @@ public class FileUtils {
             System.out.println("Невозможно создать запись в лог сервиса!\n"+StrUtils.getCustomStackTrace(e));
         }
     }
+
+    public static String newNameFile(String path, String filaName, String extName) {
+        //String path = "./";
+        String result = path + filaName + "." + extName;
+        int i = 0;
+        while (isFile(result)){
+            result = path + filaName + "(" + (++i) + ")." + extName;
+        }
+        return result;
+    }
+
+
+    private static boolean isFile(String path) {
+        File file = new File(path);
+        return file.exists();
+    }
 }

@@ -1,31 +1,42 @@
 package com.mycomp.ExtUtils;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import javax.xml.soap.MessageFactory;
-import javax.xml.soap.SOAPBody;
-import javax.xml.soap.SOAPException;
-import javax.xml.soap.SOAPMessage;
-import javax.xml.soap.SOAPPart;
-import javax.xml.transform.stream.StreamSource;
 import org.w3c.dom.DOMException;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
+import javax.xml.soap.*;
+import javax.xml.transform.stream.StreamSource;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+
+/**
+ * Класс для работы с соап сообщениями
+ */
 public class SoapUtils {
-	
+    /**
+     * Добавляет параметр guid в тег body
+     * @param message
+     * @param guid
+     * @throws Exception
+     */
 	public static void setGuidFromTag(SOAPMessage message, String guid) throws Exception
     {
 			//Iterator elemIter =  message.getSOAPBody().getChildElements();
 			//Element elme = (Element) elemIter.next();
     		SOAPBody elem =  message.getSOAPBody();
     		elem.setAttribute("guid",guid);
-    } 
-	
+    }
+
+    /**
+     * Преобразует строку в soap-message
+      * @param Smessage
+     * @return
+     * @throws Exception
+     */
 	public static SOAPMessage getSOAPMessageFromString(String Smessage) throws Exception {
         MessageFactory msgFactory = MessageFactory.newInstance();
         SOAPMessage message = msgFactory.createMessage();
@@ -40,6 +51,12 @@ public class SoapUtils {
         return message;
     }
 
+    /**
+     * Преобрвзует soap-message в строку
+     * @param Smessage
+     * @return
+     * @throws Exception
+     */
 	public static String getStringFromSOAPMessage(SOAPMessage Smessage) throws Exception {
         ByteArrayOutputStream out = new ByteArrayOutputStream();
         Smessage.writeTo(out);
@@ -47,7 +64,16 @@ public class SoapUtils {
         out.close();
         return rez;
     }
-	
+
+    /**
+     * меняет значение параметра
+     * @param message
+     * @param nameParam
+     * @param idCall
+     * @throws DOMException
+     * @throws SOAPException
+     * @throws IOException
+     */
 	public static void setParam(SOAPMessage message,String nameParam,String idCall) throws DOMException, SOAPException, IOException {
         if (message == null) return;
         Node nd = message.getSOAPBody().getChildNodes().item(0);
@@ -66,7 +92,14 @@ public class SoapUtils {
             }
         }
     }
-	
+
+    /**
+     * Получает значение тега
+     * @param message
+     * @param nodeName
+     * @return
+     * @throws Exception
+     */
 	public static String getNodeVal(SOAPMessage message, String nodeName) throws Exception{
         String rez = "";
         NodeList nl = message.getSOAPBody().getElementsByTagName(nodeName);
@@ -75,14 +108,28 @@ public class SoapUtils {
         }
         return rez;
     }
-	
+
+    /**
+     * устанавливает значение тега
+     * @param message
+     * @param nodeName
+     * @param value
+     * @throws Exception
+     */
 	public static void setNodeVal(SOAPMessage message, String nodeName, String value) throws Exception{
         NodeList nl = message.getSOAPBody().getElementsByTagName(nodeName);
         if (nl.getLength() > 0) {
             nl.item(0).setTextContent(value);
         }
 	}
-    
+
+    /**
+     * ???
+     * @param message
+     * @param nodeName
+     * @return
+     * @throws Exception
+     */
 	public static List<String> getNodeValList(SOAPMessage message, String nodeName) throws Exception{
         List<String> rez = new ArrayList<String>();
         NodeList nl = message.getSOAPHeader().getElementsByTagName(nodeName);
@@ -94,12 +141,24 @@ public class SoapUtils {
         return rez;
     }
 
+    /**
+     * Получает наименование метода соап запроса
+     * @param message
+     * @return
+     * @throws Exception
+     */
 	public static String getMethodName(SOAPMessage message) throws Exception{
         String rez = "";
         rez = message.getSOAPBody().getFirstChild().getLocalName();
         return rez;
     }
-	
+
+    /**
+     * получает кодировку soap-message
+     * @param msg
+     * @return
+     * @throws SOAPException
+     */
     public static String getMessageEncoding(SOAPMessage msg) throws SOAPException {
         String encoding = "utf-8";
         if (msg.getProperty(SOAPMessage.CHARACTER_SET_ENCODING) != null) {
